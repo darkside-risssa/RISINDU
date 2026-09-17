@@ -1,0 +1,1974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AXOM // SECURITY CONSOLE</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#05080b;
+  color:#d9ffe8;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+button,
+input{
+  font:inherit;
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* BOOT */
+
+#boot{
+  position:fixed;
+  inset:0;
+  background:#030507;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+.bootBox{
+  width:min(500px,90%);
+  text-align:center;
+}
+
+.logo{
+  font-size:42px;
+  font-weight:900;
+  letter-spacing:8px;
+}
+
+.bootText{
+  margin-top:15px;
+  opacity:.7;
+  font-size:13px;
+}
+
+.progress{
+  height:4px;
+  background:#17221b;
+  margin-top:25px;
+  overflow:hidden;
+  border-radius:10px;
+}
+
+.progressBar{
+  height:100%;
+  width:0;
+  background:#62ff9b;
+  transition:width .2s;
+}
+
+/* LOGIN */
+
+#login{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at center,#102018 0,#05080b 55%);
+}
+
+.loginCard{
+  width:min(430px,100%);
+  border:1px solid #234b32;
+  background:#09100d;
+  padding:30px;
+  border-radius:14px;
+  box-shadow:0 0 35px rgba(80,255,150,.08);
+}
+
+.brand{
+  text-align:center;
+  margin-bottom:28px;
+}
+
+.brand h1{
+  margin:0;
+  font-size:32px;
+  letter-spacing:6px;
+}
+
+.brand p{
+  margin:8px 0 0;
+  color:#73ffab;
+  font-size:12px;
+  letter-spacing:3px;
+}
+
+.loginCard h2{
+  margin:0 0 20px;
+}
+
+.field{
+  margin-bottom:16px;
+}
+
+.field label{
+  display:block;
+  font-size:12px;
+  margin-bottom:7px;
+  opacity:.7;
+}
+
+.field input{
+  width:100%;
+  padding:13px;
+  background:#050907;
+  color:white;
+  border:1px solid #274a34;
+  border-radius:8px;
+  outline:none;
+}
+
+.field input:focus{
+  border-color:#62ff9b;
+}
+
+.passwordWrap{
+  display:flex;
+}
+
+.passwordWrap input{
+  border-radius:8px 0 0 8px;
+}
+
+.passwordWrap button{
+  width:52px;
+  border:1px solid #274a34;
+  border-left:0;
+  background:#101913;
+  color:#8cffb6;
+  cursor:pointer;
+  border-radius:0 8px 8px 0;
+}
+
+.remember{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  font-size:12px;
+  opacity:.8;
+}
+
+.loginBtn{
+  width:100%;
+  margin-top:20px;
+  padding:14px;
+  border:0;
+  border-radius:8px;
+  background:#62ff9b;
+  color:#041008;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.loginBtn:hover{
+  filter:brightness(1.08);
+}
+
+.loginError{
+  color:#ff7777;
+  font-size:12px;
+  margin-top:12px;
+  min-height:18px;
+}
+
+.footer{
+  text-align:center;
+  font-size:10px;
+  opacity:.5;
+  margin-top:25px;
+}
+
+/* APP */
+
+#app{
+  min-height:100vh;
+}
+
+header{
+  height:64px;
+  border-bottom:1px solid #193323;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 22px;
+  background:#070c09;
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+
+.headerLogo{
+  font-weight:900;
+  letter-spacing:4px;
+}
+
+.userInfo{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  font-size:12px;
+}
+
+.logout{
+  background:#121a15;
+  color:#8cffb6;
+  border:1px solid #294733;
+  padding:8px 12px;
+  border-radius:7px;
+  cursor:pointer;
+}
+
+.layout{
+  display:flex;
+  min-height:calc(100vh - 64px);
+}
+
+aside{
+  width:220px;
+  border-right:1px solid #193323;
+  background:#070c09;
+  padding:15px;
+}
+
+.navBtn{
+  width:100%;
+  padding:12px;
+  margin-bottom:7px;
+  text-align:left;
+  background:transparent;
+  color:#9cb8a5;
+  border:1px solid transparent;
+  border-radius:7px;
+  cursor:pointer;
+}
+
+.navBtn:hover,
+.navBtn.active{
+  color:#62ff9b;
+  background:#0c1710;
+  border-color:#1d422b;
+}
+
+main{
+  flex:1;
+  padding:25px;
+  min-width:0;
+}
+
+.pageTitle{
+  margin:0 0 20px;
+  font-size:25px;
+}
+
+/* CARDS */
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.card{
+  border:1px solid #193323;
+  background:#080f0b;
+  padding:18px;
+  border-radius:10px;
+}
+
+.cardLabel{
+  font-size:11px;
+  opacity:.6;
+}
+
+.cardValue{
+  font-size:25px;
+  font-weight:bold;
+  margin-top:8px;
+  color:#71ffa7;
+}
+
+/* TERMINAL */
+
+.panel{
+  border:1px solid #193323;
+  background:#070d09;
+  border-radius:10px;
+  padding:18px;
+  margin-bottom:18px;
+}
+
+.panelTitle{
+  font-size:12px;
+  color:#73ffab;
+  letter-spacing:2px;
+  margin-bottom:15px;
+}
+
+.terminal{
+  min-height:220px;
+  background:#020403;
+  border:1px solid #14281b;
+  padding:15px;
+  color:#7dffa9;
+  font-family:monospace;
+  font-size:12px;
+  overflow:auto;
+}
+
+.line{
+  margin-bottom:7px;
+}
+
+/* NETWORK */
+
+.grid2{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+}
+
+.infoRow{
+  display:flex;
+  justify-content:space-between;
+  border-bottom:1px solid #15251a;
+  padding:11px 0;
+  gap:20px;
+}
+
+.infoRow:last-child{
+  border-bottom:0;
+}
+
+.value{
+  color:#72ffa7;
+  text-align:right;
+  word-break:break-word;
+}
+
+/* VIDEO */
+
+.videoGrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+.videoCard{
+  border:1px solid #193323;
+  background:#080f0b;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.videoThumb{
+  height:140px;
+  background:
+    linear-gradient(135deg,#0d1c12,#030604);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+  color:#62ff9b;
+}
+
+.videoBody{
+  padding:15px;
+}
+
+.videoBody h3{
+  margin:0 0 12px;
+  font-size:14px;
+}
+
+.watchBtn{
+  width:100%;
+  padding:10px;
+  background:#102017;
+  border:1px solid #285237;
+  color:#72ffa7;
+  border-radius:7px;
+  cursor:pointer;
+}
+
+/* PLAYER */
+
+video{
+  width:100%;
+  max-height:600px;
+  background:#000;
+  border-radius:8px;
+}
+
+/* ADMIN */
+
+.formRow{
+  display:grid;
+  grid-template-columns:1fr 2fr auto;
+  gap:10px;
+}
+
+.formRow input{
+  padding:12px;
+  background:#050907;
+  border:1px solid #274a34;
+  color:white;
+  border-radius:7px;
+}
+
+.actionBtn{
+  padding:12px 18px;
+  background:#62ff9b;
+  color:#041008;
+  border:0;
+  border-radius:7px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+}
+
+th,
+td{
+  text-align:left;
+  padding:12px 8px;
+  border-bottom:1px solid #18301f;
+}
+
+th{
+  color:#72ffa7;
+}
+
+.deleteBtn{
+  background:#211010;
+  border:1px solid #572626;
+  color:#ff8989;
+  padding:7px 10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* JSON */
+
+textarea{
+  width:100%;
+  min-height:260px;
+  resize:vertical;
+  background:#020403;
+  color:#7dffa9;
+  border:1px solid #193323;
+  padding:15px;
+  border-radius:8px;
+  font-family:monospace;
+  outline:none;
+}
+
+.status{
+  margin-top:10px;
+  font-size:12px;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+  .cards{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .videoGrid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  aside{
+    width:180px;
+  }
+}
+
+@media(max-width:650px){
+
+  header{
+    padding:0 12px;
+  }
+
+  .headerLogo{
+    font-size:13px;
+  }
+
+  .userInfo{
+    font-size:10px;
+    gap:7px;
+  }
+
+  .layout{
+    display:block;
+  }
+
+  aside{
+    width:100%;
+    border-right:0;
+    border-bottom:1px solid #193323;
+    display:flex;
+    overflow-x:auto;
+    gap:6px;
+    padding:8px;
+  }
+
+  .navBtn{
+    min-width:max-content;
+    width:auto;
+    margin:0;
+  }
+
+  main{
+    padding:15px;
+  }
+
+  .cards,
+  .videoGrid,
+  .grid2{
+    grid-template-columns:1fr;
+  }
+
+  .formRow{
+    grid-template-columns:1fr;
+  }
+
+  .loginCard{
+    padding:22px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- BOOT -->
+
+<div id="boot">
+  <div class="bootBox">
+    <div class="logo">AXOM</div>
+    <div class="bootText">INITIALIZING SECURITY CONSOLE...</div>
+
+    <div class="progress">
+      <div id="progressBar" class="progressBar"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- LOGIN -->
+
+<section id="login" class="hidden">
+
+  <div class="loginCard">
+
+    <div class="brand">
+      <h1>RISINDU</h1>
+      <p>SECURITY CONSOLE</p>
+    </div>
+
+    <h2>Welcome Back</h2>
+
+    <form id="loginForm">
+
+      <div class="field">
+        <label>USERNAME</label>
+        <input
+          id="username"
+          type="text"
+          autocomplete="username"
+          required
+        >
+      </div>
+
+      <div class="field">
+        <label>PASSWORD</label>
+
+        <div class="passwordWrap">
+          <input
+            id="password"
+            type="password"
+            autocomplete="current-password"
+            required
+          >
+
+          <button
+            type="button"
+            id="showPassword"
+          >
+            👁
+          </button>
+        </div>
+      </div>
+
+      <label class="remember">
+        <input
+          id="remember"
+          type="checkbox"
+        >
+        Remember session
+      </label>
+
+      <button
+        class="loginBtn"
+        type="submit"
+      >
+        ACCESS CONSOLE
+      </button>
+
+      <div
+        id="loginError"
+        class="loginError"
+      ></div>
+
+    </form>
+
+    <div class="footer">
+      AES-256 • SECURE SESSION
+      <br><br>
+      DEVELOPED BY RISINDU
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- APP -->
+
+<section id="app" class="hidden">
+
+<header>
+
+  <div class="headerLogo">
+    AXOM // SECURITY CONSOLE
+  </div>
+
+  <div class="userInfo">
+    <span id="currentUser"></span>
+
+    <button
+      class="logout"
+      onclick="logout()"
+    >
+      LOGOUT
+    </button>
+  </div>
+
+</header>
+
+
+<div class="layout">
+
+<aside>
+
+  <button
+    class="navBtn active"
+    data-page="dashboard"
+    onclick="page('dashboard')"
+  >
+    Dashboard
+  </button>
+
+  <button
+    class="navBtn"
+    data-page="network"
+    onclick="page('network')"
+  >
+    Network
+  </button>
+
+  <button
+    class="navBtn"
+    data-page="tools"
+    onclick="page('tools')"
+  >
+    Tools
+  </button>
+
+  <button
+    class="navBtn"
+    data-page="videos"
+    onclick="page('videos')"
+  >
+    Videos
+  </button>
+
+  <button
+    class="navBtn"
+    data-page="downloads"
+    onclick="page('downloads')"
+  >
+    Download Library
+  </button>
+
+  <button
+    id="adminNavigation"
+    class="navBtn hidden"
+    data-page="admin"
+    onclick="page('admin')"
+  >
+    Admin Panel
+  </button>
+
+</aside>
+
+
+<main>
+
+<!-- DASHBOARD -->
+
+<div
+  id="dashboardPage"
+  class="page"
+>
+
+  <h1 class="pageTitle">
+    Dashboard
+  </h1>
+
+  <div class="cards">
+
+    <div class="card">
+      <div class="cardLabel">SESSION</div>
+      <div
+        id="sessionStatus"
+        class="cardValue"
+      >
+        ACTIVE
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cardLabel">CPU</div>
+      <div
+        id="cpu"
+        class="cardValue"
+      >
+        --%
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cardLabel">MEMORY</div>
+      <div
+        id="memory"
+        class="cardValue"
+      >
+        --%
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cardLabel">UPTIME</div>
+      <div
+        id="uptime"
+        class="cardValue"
+      >
+        00:00:00
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="panel">
+
+    <div class="panelTitle">
+      SYSTEM TERMINAL
+    </div>
+
+    <div
+      id="terminal"
+      class="terminal"
+    ></div>
+
+  </div>
+
+</div>
+
+
+<!-- NETWORK -->
+
+<div
+  id="networkPage"
+  class="page hidden"
+>
+
+  <h1 class="pageTitle">
+    Network
+  </h1>
+
+  <div class="grid2">
+
+    <div class="panel">
+
+      <div class="panelTitle">
+        CONNECTION
+      </div>
+
+      <div class="infoRow">
+        <span>Status</span>
+        <span
+          id="connection"
+          class="value"
+        >
+          Checking...
+        </span>
+      </div>
+
+      <div class="infoRow">
+        <span>Public IP</span>
+        <span
+          id="publicIP"
+          class="value"
+        >
+          Loading...
+        </span>
+      </div>
+
+    </div>
+
+
+    <div class="panel">
+
+      <div class="panelTitle">
+        CLIENT
+      </div>
+
+      <div class="infoRow">
+        <span>Platform</span>
+        <span
+          id="platform"
+          class="value"
+        >
+          -
+        </span>
+      </div>
+
+      <div class="infoRow">
+        <span>Language</span>
+        <span
+          id="language"
+          class="value"
+        >
+          -
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- TOOLS -->
+
+<div
+  id="toolsPage"
+  class="page hidden"
+>
+
+  <h1 class="pageTitle">
+    Tools
+  </h1>
+
+  <div class="panel">
+
+    <div class="panelTitle">
+      LOCAL JSON VIEWER
+    </div>
+
+    <textarea
+      id="jsonInput"
+      placeholder='Paste JSON here...'
+    ></textarea>
+
+    <br><br>
+
+    <button
+      class="actionBtn"
+      onclick="formatJSON()"
+    >
+      FORMAT JSON
+    </button>
+
+    <div
+      id="jsonStatus"
+      class="status"
+    ></div>
+
+  </div>
+
+</div>
+
+
+<!-- VIDEOS -->
+
+<div
+  id="videosPage"
+  class="page hidden"
+>
+
+  <h1 class="pageTitle">
+    Video Library
+  </h1>
+
+  <div
+    id="videoGrid"
+    class="videoGrid"
+  ></div>
+
+
+  <div
+    id="videoPlayerPanel"
+    class="panel hidden"
+  >
+
+    <div class="panelTitle">
+      VIDEO PLAYER
+    </div>
+
+    <video
+      id="videoPlayer"
+      controls
+      playsinline
+    ></video>
+
+  </div>
+
+</div>
+
+
+<!-- DOWNLOADS -->
+
+<div
+  id="downloadsPage"
+  class="page hidden"
+>
+
+  <h1 class="pageTitle">
+    Download Library
+  </h1>
+
+  <div class="panel">
+
+    <div class="panelTitle">
+      RESOURCES
+    </div>
+
+    <p>
+      Your downloadable resources can be added here.
+    </p>
+
+  </div>
+
+</div>
+
+
+<!-- ADMIN -->
+
+<div
+  id="adminPage"
+  class="page hidden"
+>
+
+  <h1 class="pageTitle">
+    Admin Panel
+  </h1>
+
+
+  <div class="cards">
+
+    <div class="card">
+      <div class="cardLabel">USERS</div>
+      <div
+        id="userCount"
+        class="cardValue"
+      >
+        0
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cardLabel">VIDEOS</div>
+      <div
+        id="adminVideoCount"
+        class="cardValue"
+      >
+        0
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="panel">
+
+    <div class="panelTitle">
+      ADD VIDEO
+    </div>
+
+    <div class="formRow">
+
+      <input
+        id="videoTitle"
+        placeholder="Video title"
+      >
+
+      <input
+        id="videoURL"
+        placeholder="Video URL"
+      >
+
+      <button
+        class="actionBtn"
+        onclick="addVideo()"
+      >
+        ADD VIDEO
+      </button>
+
+    </div>
+
+    <div
+      id="adminStatus"
+      class="status"
+    ></div>
+
+  </div>
+
+
+  <div class="panel">
+
+    <div class="panelTitle">
+      VIDEO MANAGEMENT
+    </div>
+
+    <div id="adminVideos"></div>
+
+  </div>
+
+
+  <div class="panel">
+
+    <div class="panelTitle">
+      USERS
+    </div>
+
+    <div style="overflow:auto">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+
+        <tbody id="usersTable"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+</main>
+
+</div>
+
+</section>
+
+
+<script>
+
+/*
+  IMPORTANT:
+  After Render deploys your backend,
+  replace this URL with your real Render URL.
+*/
+
+const API_URL =
+  "https://YOUR-RENDER-BACKEND.onrender.com";
+
+
+let currentUser = null;
+let startTime = Date.now();
+
+
+/* HELPERS */
+
+function escapeHTML(value){
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+
+function getToken(){
+
+  return localStorage.getItem(
+    "axom_token"
+  );
+}
+
+
+function getStoredUser(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        "axom_user"
+      )
+    );
+
+  }catch{
+
+    return null;
+  }
+}
+
+
+async function api(
+  endpoint,
+  options={}
+){
+
+  const headers = {
+    "Content-Type":"application/json",
+    ...(options.headers || {})
+  };
+
+  const token = getToken();
+
+  if(token){
+
+    headers.Authorization =
+      `Bearer ${token}`;
+  }
+
+  const response =
+    await fetch(
+      API_URL + endpoint,
+      {
+        ...options,
+        headers
+      }
+    );
+
+  const data =
+    await response.json()
+      .catch(() => ({}));
+
+  if(!response.ok){
+
+    throw new Error(
+      data.error ||
+      `Request failed (${response.status})`
+    );
+  }
+
+  return data;
+}
+
+
+/* BOOT */
+
+let progress = 0;
+
+const bootTimer =
+  setInterval(() => {
+
+    progress +=
+      Math.floor(
+        Math.random()*15
+      ) + 5;
+
+    if(progress > 100)
+      progress = 100;
+
+    document
+      .getElementById("progressBar")
+      .style.width =
+      progress + "%";
+
+    if(progress >= 100){
+
+      clearInterval(
+        bootTimer
+      );
+
+      setTimeout(
+        showInitialScreen,
+        400
+      );
+    }
+
+  },180);
+
+
+function showInitialScreen(){
+
+  document
+    .getElementById("boot")
+    .classList.add("hidden");
+
+  const token =
+    getToken();
+
+  const user =
+    getStoredUser();
+
+  if(token && user){
+
+    currentUser = user;
+
+    showApp();
+
+  }else{
+
+    document
+      .getElementById("login")
+      .classList.remove("hidden");
+  }
+}
+
+
+/* PASSWORD */
+
+document
+  .getElementById("showPassword")
+  .addEventListener(
+    "click",
+    () => {
+
+      const input =
+        document.getElementById(
+          "password"
+        );
+
+      input.type =
+        input.type === "password"
+        ? "text"
+        : "password";
+    }
+  );
+
+
+/* LOGIN */
+
+document
+  .getElementById("loginForm")
+  .addEventListener(
+    "submit",
+    async event => {
+
+      event.preventDefault();
+
+      const username =
+        document
+          .getElementById("username")
+          .value
+          .trim();
+
+      const password =
+        document
+          .getElementById("password")
+          .value;
+
+      const error =
+        document
+          .getElementById("loginError");
+
+      error.textContent =
+        "Authenticating...";
+
+      try{
+
+        const data =
+          await api(
+            "/api/auth/login",
+            {
+              method:"POST",
+              body:JSON.stringify({
+                username,
+                password
+              })
+            }
+          );
+
+        localStorage.setItem(
+          "axom_token",
+          data.token
+        );
+
+        localStorage.setItem(
+          "axom_user",
+          JSON.stringify(data.user)
+        );
+
+        currentUser =
+          data.user;
+
+        if(
+          !document
+            .getElementById("remember")
+            .checked
+        ){
+
+          sessionStorage.setItem(
+            "axom_session",
+            "1"
+          );
+        }
+
+        error.textContent = "";
+
+        showApp();
+
+      }catch(err){
+
+        error.textContent =
+          err.message;
+      }
+    }
+  );
+
+
+/* APP */
+
+function showApp(){
+
+  document
+    .getElementById("login")
+    .classList.add("hidden");
+
+  document
+    .getElementById("app")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("currentUser")
+    .textContent =
+    `${currentUser.username} • ${currentUser.role}`;
+
+  const admin =
+    document.getElementById(
+      "adminNavigation"
+    );
+
+  if(currentUser.role === "admin"){
+
+    admin.classList.remove(
+      "hidden"
+    );
+
+  }else{
+
+    admin.classList.add(
+      "hidden"
+    );
+  }
+
+  page("dashboard");
+
+  loadNetwork();
+  loadVideos();
+
+  if(currentUser.role === "admin"){
+    loadAdmin();
+  }
+
+  startDashboard();
+}
+
+
+/* PAGE NAVIGATION */
+
+function page(name){
+
+  if(
+    name === "admin" &&
+    currentUser?.role !== "admin"
+  ){
+    return;
+  }
+
+  document
+    .querySelectorAll(".page")
+    .forEach(
+      element =>
+        element.classList.add(
+          "hidden"
+        )
+    );
+
+  const target =
+    document.getElementById(
+      name + "Page"
+    );
+
+  if(target)
+    target.classList.remove(
+      "hidden"
+    );
+
+  document
+    .querySelectorAll(".navBtn")
+    .forEach(button => {
+
+      button.classList.toggle(
+        "active",
+        button.dataset.page === name
+      );
+
+    });
+
+  if(name === "videos"){
+    loadVideos();
+  }
+
+  if(name === "admin" &&
+     currentUser.role === "admin"){
+
+    loadAdmin();
+  }
+}
+
+
+/* DASHBOARD */
+
+function startDashboard(){
+
+  setInterval(() => {
+
+    const cpu =
+      Math.floor(
+        Math.random()*55
+      ) + 10;
+
+    const memory =
+      Math.floor(
+        Math.random()*40
+      ) + 30;
+
+    document
+      .getElementById("cpu")
+      .textContent =
+      cpu + "%";
+
+    document
+      .getElementById("memory")
+      .textContent =
+      memory + "%";
+
+    const elapsed =
+      Math.floor(
+        (Date.now()-startTime)/1000
+      );
+
+    const h =
+      String(
+        Math.floor(elapsed/3600)
+      ).padStart(2,"0");
+
+    const m =
+      String(
+        Math.floor(
+          (elapsed%3600)/60
+        )
+      ).padStart(2,"0");
+
+    const s =
+      String(
+        elapsed%60
+      ).padStart(2,"0");
+
+    document
+      .getElementById("uptime")
+      .textContent =
+      `${h}:${m}:${s}`;
+
+  },1000);
+
+
+  const terminal =
+    document.getElementById(
+      "terminal"
+    );
+
+  const lines = [
+    "[OK] AXOM console initialized",
+    "[OK] Authentication module ready",
+    "[OK] Session established",
+    "[OK] Network monitor ready",
+    "[OK] Security services online"
+  ];
+
+  terminal.innerHTML =
+    lines.map(
+      line =>
+        `<div class="line">${escapeHTML(line)}</div>`
+    ).join("");
+}
+
+
+/* NETWORK */
+
+async function loadNetwork(){
+
+  document
+    .getElementById("platform")
+    .textContent =
+    navigator.platform || "Unknown";
+
+  document
+    .getElementById("language")
+    .textContent =
+    navigator.language || "Unknown";
+
+  document
+    .getElementById("connection")
+    .textContent =
+    navigator.onLine
+    ? "ONLINE"
+    : "OFFLINE";
+
+  try{
+
+    const response =
+      await fetch(
+        "https://api.ipify.org?format=json"
+      );
+
+    const data =
+      await response.json();
+
+    document
+      .getElementById("publicIP")
+      .textContent =
+      data.ip;
+
+  }catch{
+
+    document
+      .getElementById("publicIP")
+      .textContent =
+      "Unavailable";
+  }
+}
+
+
+/* JSON TOOL */
+
+function formatJSON(){
+
+  const input =
+    document
+      .getElementById("jsonInput");
+
+  const status =
+    document
+      .getElementById("jsonStatus");
+
+  try{
+
+    const parsed =
+      JSON.parse(input.value);
+
+    input.value =
+      JSON.stringify(
+        parsed,
+        null,
+        2
+      );
+
+    status.textContent =
+      "Valid JSON.";
+
+  }catch{
+
+    status.textContent =
+      "Invalid JSON.";
+  }
+}
+
+
+/* VIDEOS */
+
+async function loadVideos(){
+
+  const grid =
+    document.getElementById(
+      "videoGrid"
+    );
+
+  grid.innerHTML =
+    "<div>Loading...</div>";
+
+  try{
+
+    const videos =
+      await api(
+        "/api/videos"
+      );
+
+    if(!videos.length){
+
+      grid.innerHTML =
+        "<div>No videos available.</div>";
+
+      return;
+    }
+
+    grid.innerHTML =
+      videos.map(
+        video => `
+          <div class="videoCard">
+
+            <div class="videoThumb">
+              ▶
+            </div>
+
+            <div class="videoBody">
+
+              <h3>
+                ${escapeHTML(
+                  video.title
+                )}
+              </h3>
+
+              <button
+                class="watchBtn"
+                onclick="watchVideo('${video.id}')"
+              >
+                WATCH
+              </button>
+
+            </div>
+
+          </div>
+        `
+      ).join("");
+
+  }catch(error){
+
+    grid.innerHTML =
+      `<div>${escapeHTML(
+        error.message
+      )}</div>`;
+  }
+}
+
+
+async function watchVideo(id){
+
+  const playerPanel =
+    document.getElementById(
+      "videoPlayerPanel"
+    );
+
+  const player =
+    document.getElementById(
+      "videoPlayer"
+    );
+
+  const token =
+    getToken();
+
+  player.src =
+    `${API_URL}/api/videos/${encodeURIComponent(id)}/stream`;
+
+  /*
+    Authorization headers cannot be directly
+    added to a normal HTML video element.
+    For production, use a short-lived signed
+    playback URL or another authenticated
+    media mechanism.
+  */
+
+  playerPanel.classList.remove(
+    "hidden"
+  );
+
+  player.load();
+}
+
+
+/* ADMIN */
+
+async function loadAdmin(){
+
+  try{
+
+    const users =
+      await api(
+        "/api/admin/users"
+      );
+
+    const videos =
+      await api(
+        "/api/videos"
+      );
+
+    document
+      .getElementById("userCount")
+      .textContent =
+      users.length;
+
+    document
+      .getElementById("adminVideoCount")
+      .textContent =
+      videos.length;
+
+
+    document
+      .getElementById("usersTable")
+      .innerHTML =
+      users.map(
+        user => `
+          <tr>
+            <td>
+              ${escapeHTML(
+                user.username
+              )}
+            </td>
+
+            <td>
+              ${escapeHTML(
+                user.role
+              )}
+            </td>
+
+            <td>
+              ${escapeHTML(
+                new Date(
+                  user.createdAt
+                ).toLocaleString()
+              )}
+            </td>
+          </tr>
+        `
+      ).join("");
+
+
+    document
+      .getElementById("adminVideos")
+      .innerHTML =
+      videos.length
+      ? videos.map(
+          video => `
+            <div class="infoRow">
+
+              <span>
+                ${escapeHTML(
+                  video.title
+                )}
+              </span>
+
+              <button
+                class="deleteBtn"
+                onclick="deleteVideo('${video.id}')"
+              >
+                DELETE
+              </button>
+
+            </div>
+          `
+        ).join("")
+      : "<p>No videos.</p>";
+
+  }catch(error){
+
+    document
+      .getElementById("adminStatus")
+      .textContent =
+      error.message;
+  }
+}
+
+
+async function addVideo(){
+
+  const title =
+    document
+      .getElementById("videoTitle")
+      .value
+      .trim();
+
+  const url =
+    document
+      .getElementById("videoURL")
+      .value
+      .trim();
+
+  const status =
+    document
+      .getElementById("adminStatus");
+
+  if(!title || !url){
+
+    status.textContent =
+      "Title and URL are required.";
+
+    return;
+  }
+
+  status.textContent =
+    "Adding video...";
+
+  try{
+
+    await api(
+      "/api/admin/videos",
+      {
+        method:"POST",
+        body:JSON.stringify({
+          title,
+          url
+        })
+      }
+    );
+
+    document
+      .getElementById("videoTitle")
+      .value = "";
+
+    document
+      .getElementById("videoURL")
+      .value = "";
+
+    status.textContent =
+      "Video added.";
+
+    loadAdmin();
+    loadVideos();
+
+  }catch(error){
+
+    status.textContent =
+      error.message;
+  }
+}
+
+
+async function deleteVideo(id){
+
+  if(!confirm(
+    "Delete this video?"
+  )){
+    return;
+  }
+
+  try{
+
+    await api(
+      `/api/admin/videos/${encodeURIComponent(id)}`,
+      {
+        method:"DELETE"
+      }
+    );
+
+    loadAdmin();
+    loadVideos();
+
+  }catch(error){
+
+    alert(error.message);
+  }
+}
+
+
+/* LOGOUT */
+
+async function logout(){
+
+  try{
+
+    if(getToken()){
+
+      await api(
+        "/api/auth/logout",
+        {
+          method:"POST"
+        }
+      );
+    }
+
+  }catch{}
+
+  localStorage.removeItem(
+    "axom_token"
+  );
+
+  localStorage.removeItem(
+    "axom_user"
+  );
+
+  sessionStorage.removeItem(
+    "axom_session"
+  );
+
+  location.reload();
+}
+
+
+/* ONLINE STATUS */
+
+window.addEventListener(
+  "online",
+  () => {
+
+    document
+      .getElementById("connection")
+      .textContent =
+      "ONLINE";
+  }
+);
+
+window.addEventListener(
+  "offline",
+  () => {
+
+    document
+      .getElementById("connection")
+      .textContent =
+      "OFFLINE";
+  }
+);
+
+</script>
+
+</body>
+  </html>
