@@ -2,140 +2,207 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AXOM // SECURITY CONSOLE</title>
 
 <style>
 *{
   box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+:root{
+  --green:#00ff88;
+  --green2:#00c96b;
+  --bg:#020604;
+  --panel:#06110b;
+  --panel2:#09170e;
+  --border:rgba(0,255,136,.22);
+  --text:#d9ffe9;
+  --muted:#78a88d;
+  --danger:#ff496f;
+  --warning:#ffd166;
 }
 
 body{
-  margin:0;
-  background:#05080b;
-  color:#d9ffe8;
-  font-family:Arial,Helvetica,sans-serif;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(0,255,136,.08),transparent 35%),
+    linear-gradient(180deg,#020604,#010302);
+  color:var(--text);
+  font-family:Consolas,Monaco,monospace;
+  overflow-x:hidden;
 }
 
-button,
-input{
-  font:inherit;
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(rgba(0,255,136,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,255,136,.025) 1px,transparent 1px);
+  background-size:35px 35px;
+  mask-image:linear-gradient(to bottom,black,transparent);
 }
 
-.hidden{
-  display:none!important;
-}
-
-/* BOOT */
+/* ================= BOOT ================= */
 
 #boot{
   position:fixed;
   inset:0;
-  background:#030507;
+  z-index:99999;
   display:flex;
   align-items:center;
   justify-content:center;
-  z-index:9999;
+  background:#010302;
 }
 
 .bootBox{
-  width:min(500px,90%);
-  text-align:center;
+  width:min(620px,90%);
+  padding:35px;
+  border:1px solid var(--border);
+  background:rgba(3,12,7,.94);
+  box-shadow:
+    0 0 40px rgba(0,255,136,.08),
+    inset 0 0 40px rgba(0,255,136,.025);
+  position:relative;
+  overflow:hidden;
+}
+
+.bootBox::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:100%;
+  height:1px;
+  background:var(--green);
+  box-shadow:0 0 15px var(--green);
+  animation:scan 2s linear infinite;
+}
+
+@keyframes scan{
+  to{left:100%}
 }
 
 .logo{
-  font-size:42px;
+  text-align:center;
+  font-size:54px;
   font-weight:900;
-  letter-spacing:8px;
+  letter-spacing:12px;
+  color:var(--green);
+  text-shadow:
+    0 0 8px var(--green),
+    0 0 30px rgba(0,255,136,.4);
+  margin-bottom:22px;
 }
 
 .bootText{
-  margin-top:15px;
-  opacity:.7;
+  color:var(--green);
   font-size:13px;
+  min-height:80px;
+  line-height:1.8;
+  white-space:pre-line;
+}
+
+.bootLine{
+  opacity:.9;
 }
 
 .progress{
-  height:4px;
-  background:#17221b;
-  margin-top:25px;
+  width:100%;
+  height:8px;
+  border:1px solid var(--border);
+  background:#020804;
+  margin-top:18px;
   overflow:hidden;
-  border-radius:10px;
 }
 
 .progressBar{
+  width:0%;
   height:100%;
-  width:0;
-  background:#62ff9b;
-  transition:width .2s;
+  background:var(--green);
+  box-shadow:0 0 14px var(--green);
+  transition:width .15s linear;
 }
 
-/* LOGIN */
+.bootPercent{
+  margin-top:10px;
+  text-align:right;
+  color:var(--green);
+  font-size:12px;
+}
+
+/* ================= LOGIN ================= */
 
 #login{
   min-height:100vh;
-  display:flex;
+  display:none;
   align-items:center;
   justify-content:center;
   padding:20px;
-  background:
-    radial-gradient(circle at center,#102018 0,#05080b 55%);
 }
 
 .loginCard{
   width:min(430px,100%);
-  border:1px solid #234b32;
-  background:#09100d;
-  padding:30px;
-  border-radius:14px;
-  box-shadow:0 0 35px rgba(80,255,150,.08);
+  border:1px solid var(--border);
+  background:rgba(4,14,8,.95);
+  padding:32px;
+  box-shadow:0 0 45px rgba(0,255,136,.08);
 }
 
 .brand{
   text-align:center;
-  margin-bottom:28px;
+  margin-bottom:30px;
 }
 
 .brand h1{
-  margin:0;
-  font-size:32px;
-  letter-spacing:6px;
+  color:var(--green);
+  letter-spacing:8px;
+  font-size:35px;
+  text-shadow:0 0 15px rgba(0,255,136,.45);
 }
 
 .brand p{
-  margin:8px 0 0;
-  color:#73ffab;
-  font-size:12px;
+  margin-top:8px;
+  color:var(--muted);
+  font-size:11px;
   letter-spacing:3px;
 }
 
-.loginCard h2{
-  margin:0 0 20px;
+.welcome{
+  text-align:center;
+  margin-bottom:25px;
+  color:#fff;
+  font-size:15px;
 }
 
 .field{
-  margin-bottom:16px;
+  margin-bottom:17px;
 }
 
 .field label{
   display:block;
-  font-size:12px;
+  color:var(--muted);
+  font-size:11px;
   margin-bottom:7px;
-  opacity:.7;
 }
 
 .field input{
   width:100%;
   padding:13px;
-  background:#050907;
-  color:white;
-  border:1px solid #274a34;
-  border-radius:8px;
+  background:#020704;
+  color:var(--green);
+  border:1px solid var(--border);
   outline:none;
+  font-family:inherit;
 }
 
 .field input:focus{
-  border-color:#62ff9b;
+  border-color:var(--green);
+  box-shadow:0 0 12px rgba(0,255,136,.12);
 }
 
 .passwordWrap{
@@ -143,94 +210,127 @@ input{
 }
 
 .passwordWrap input{
-  border-radius:8px 0 0 8px;
+  flex:1;
 }
 
-.passwordWrap button{
-  width:52px;
-  border:1px solid #274a34;
+.showPass{
+  width:60px;
+  border:1px solid var(--border);
   border-left:0;
-  background:#101913;
-  color:#8cffb6;
+  background:#07140b;
+  color:var(--green);
   cursor:pointer;
-  border-radius:0 8px 8px 0;
 }
 
 .remember{
   display:flex;
   gap:8px;
   align-items:center;
-  font-size:12px;
-  opacity:.8;
+  font-size:11px;
+  color:var(--muted);
+  margin:12px 0 20px;
+}
+
+.remember input{
+  accent-color:var(--green);
 }
 
 .loginBtn{
   width:100%;
-  margin-top:20px;
   padding:14px;
-  border:0;
-  border-radius:8px;
-  background:#62ff9b;
-  color:#041008;
+  border:1px solid var(--green);
+  background:rgba(0,255,136,.06);
+  color:var(--green);
+  font-family:inherit;
   font-weight:bold;
   cursor:pointer;
+  letter-spacing:2px;
 }
 
 .loginBtn:hover{
-  filter:brightness(1.08);
+  background:var(--green);
+  color:#001d0d;
+  box-shadow:0 0 20px rgba(0,255,136,.25);
+}
+
+.loginBtn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
 }
 
 .loginError{
-  color:#ff7777;
+  min-height:20px;
+  margin-top:15px;
+  color:var(--danger);
+  text-align:center;
   font-size:12px;
-  margin-top:12px;
-  min-height:18px;
+}
+
+.securityTag{
+  text-align:center;
+  margin-top:18px;
+  color:#527d63;
+  font-size:10px;
 }
 
 .footer{
   text-align:center;
-  font-size:10px;
-  opacity:.5;
   margin-top:25px;
+  color:#426550;
+  font-size:9px;
 }
 
-/* APP */
+/* ================= APP ================= */
 
 #app{
+  display:none;
   min-height:100vh;
 }
 
-header{
+.header{
   height:64px;
-  border-bottom:1px solid #193323;
   display:flex;
   align-items:center;
   justify-content:space-between;
   padding:0 22px;
-  background:#070c09;
+  border-bottom:1px solid var(--border);
+  background:rgba(2,8,5,.94);
   position:sticky;
   top:0;
   z-index:50;
+  backdrop-filter:blur(10px);
 }
 
 .headerLogo{
-  font-weight:900;
-  letter-spacing:4px;
+  color:var(--green);
+  font-size:20px;
+  font-weight:bold;
+  letter-spacing:5px;
 }
 
-.userInfo{
+.headerRight{
   display:flex;
   align-items:center;
-  gap:14px;
-  font-size:12px;
+  gap:18px;
+  font-size:11px;
 }
 
-.logout{
-  background:#121a15;
-  color:#8cffb6;
-  border:1px solid #294733;
-  padding:8px 12px;
-  border-radius:7px;
+.statusDot{
+  width:8px;
+  height:8px;
+  display:inline-block;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 10px var(--green);
+  margin-right:6px;
+}
+
+.logoutBtn{
+  border:1px solid rgba(255,73,111,.4);
+  background:transparent;
+  color:var(--danger);
+  padding:7px 11px;
+  font-family:inherit;
   cursor:pointer;
 }
 
@@ -239,323 +339,411 @@ header{
   min-height:calc(100vh - 64px);
 }
 
-aside{
-  width:220px;
-  border-right:1px solid #193323;
-  background:#070c09;
-  padding:15px;
+.sidebar{
+  width:230px;
+  border-right:1px solid var(--border);
+  background:#030905;
+  padding:18px 12px;
+  flex-shrink:0;
+}
+
+.navTitle{
+  font-size:9px;
+  color:#426550;
+  letter-spacing:2px;
+  margin:5px 10px 12px;
 }
 
 .navBtn{
+  display:block;
   width:100%;
-  padding:12px;
-  margin-bottom:7px;
   text-align:left;
-  background:transparent;
-  color:#9cb8a5;
   border:1px solid transparent;
-  border-radius:7px;
+  background:transparent;
+  color:#7fa990;
+  padding:12px;
+  margin-bottom:5px;
   cursor:pointer;
+  font-family:inherit;
 }
 
 .navBtn:hover,
 .navBtn.active{
-  color:#62ff9b;
-  background:#0c1710;
-  border-color:#1d422b;
+  border-color:var(--border);
+  background:rgba(0,255,136,.045);
+  color:var(--green);
 }
 
-main{
+.navBtn.adminOnly{
+  display:none;
+}
+
+.main{
   flex:1;
   padding:25px;
   min-width:0;
 }
 
-.pageTitle{
-  margin:0 0 20px;
-  font-size:25px;
+.page{
+  display:none;
 }
 
-/* CARDS */
+.page.active{
+  display:block;
+}
 
-.cards{
+.pageTitle{
+  color:var(--green);
+  font-size:20px;
+  letter-spacing:3px;
+  margin-bottom:22px;
+}
+
+/* ================= CARDS ================= */
+
+.grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:15px;
-  margin-bottom:20px;
+  gap:14px;
 }
 
 .card{
-  border:1px solid #193323;
-  background:#080f0b;
+  border:1px solid var(--border);
+  background:rgba(5,16,9,.72);
   padding:18px;
-  border-radius:10px;
+  min-height:100px;
 }
 
-.cardLabel{
-  font-size:11px;
-  opacity:.6;
+.cardTitle{
+  color:#638a72;
+  font-size:10px;
+  margin-bottom:12px;
 }
 
 .cardValue{
-  font-size:25px;
+  color:var(--green);
+  font-size:24px;
   font-weight:bold;
+}
+
+.cardSmall{
+  color:#537561;
+  font-size:10px;
   margin-top:8px;
-  color:#71ffa7;
 }
 
-/* TERMINAL */
-
-.panel{
-  border:1px solid #193323;
-  background:#070d09;
-  border-radius:10px;
-  padding:18px;
-  margin-bottom:18px;
-}
-
-.panelTitle{
-  font-size:12px;
-  color:#73ffab;
-  letter-spacing:2px;
-  margin-bottom:15px;
-}
+/* ================= TERMINAL ================= */
 
 .terminal{
-  min-height:220px;
-  background:#020403;
-  border:1px solid #14281b;
+  margin-top:18px;
+  border:1px solid var(--border);
+  background:#010503;
+}
+
+.terminalHead{
+  padding:9px 12px;
+  border-bottom:1px solid var(--border);
+  color:#527d63;
+  font-size:10px;
+}
+
+.terminalBody{
   padding:15px;
-  color:#7dffa9;
-  font-family:monospace;
+  min-height:210px;
+  color:#8cffba;
   font-size:12px;
+  line-height:1.8;
+  white-space:pre-wrap;
   overflow:auto;
 }
 
-.line{
-  margin-bottom:7px;
+.prompt{
+  color:var(--green);
 }
 
-/* NETWORK */
+/* ================= NETWORK ================= */
 
-.grid2{
+.infoGrid{
   display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:15px;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
 }
 
-.infoRow{
-  display:flex;
-  justify-content:space-between;
-  border-bottom:1px solid #15251a;
-  padding:11px 0;
-  gap:20px;
+.infoBox{
+  border:1px solid var(--border);
+  background:rgba(5,16,9,.7);
+  padding:20px;
 }
 
-.infoRow:last-child{
-  border-bottom:0;
+.infoBox span{
+  display:block;
+  color:#527d63;
+  font-size:10px;
+  margin-bottom:10px;
 }
 
-.value{
-  color:#72ffa7;
-  text-align:right;
+.infoBox strong{
+  color:var(--green);
   word-break:break-word;
 }
 
-/* VIDEO */
+/* ================= TOOLS ================= */
+
+textarea{
+  width:100%;
+  min-height:250px;
+  resize:vertical;
+  background:#010503;
+  border:1px solid var(--border);
+  color:var(--green);
+  padding:15px;
+  outline:none;
+  font-family:inherit;
+}
+
+.toolButtons{
+  display:flex;
+  gap:10px;
+  margin-top:12px;
+}
+
+.toolBtn,
+.watchBtn,
+.addBtn{
+  padding:10px 14px;
+  border:1px solid var(--border);
+  background:rgba(0,255,136,.05);
+  color:var(--green);
+  font-family:inherit;
+  cursor:pointer;
+}
+
+.toolBtn:hover,
+.watchBtn:hover,
+.addBtn:hover{
+  background:var(--green);
+  color:#001d0d;
+}
+
+.toolStatus{
+  margin-top:10px;
+  font-size:11px;
+  color:#668d74;
+}
+
+/* ================= VIDEOS ================= */
 
 .videoGrid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
   gap:15px;
 }
 
 .videoCard{
-  border:1px solid #193323;
-  background:#080f0b;
-  border-radius:10px;
+  border:1px solid var(--border);
+  background:#041009;
   overflow:hidden;
 }
 
 .videoThumb{
   height:140px;
   background:
-    linear-gradient(135deg,#0d1c12,#030604);
+    radial-gradient(circle,#0a3a22,#020804 65%);
   display:flex;
   align-items:center;
   justify-content:center;
+  color:var(--green);
   font-size:30px;
-  color:#62ff9b;
 }
 
 .videoBody{
-  padding:15px;
+  padding:14px;
 }
 
-.videoBody h3{
-  margin:0 0 12px;
-  font-size:14px;
+.videoTitle{
+  color:#cffff0;
+  min-height:40px;
+  font-size:13px;
+  margin-bottom:12px;
+  word-break:break-word;
 }
 
-.watchBtn{
-  width:100%;
-  padding:10px;
-  background:#102017;
-  border:1px solid #285237;
-  color:#72ffa7;
-  border-radius:7px;
-  cursor:pointer;
+.videoEmpty{
+  border:1px dashed var(--border);
+  padding:35px;
+  text-align:center;
+  color:#527d63;
 }
 
-/* PLAYER */
-
-video{
-  width:100%;
-  max-height:600px;
+.playerWrap{
+  margin-top:22px;
+  border:1px solid var(--border);
   background:#000;
-  border-radius:8px;
+  display:none;
 }
 
-/* ADMIN */
+#videoPlayer{
+  display:block;
+  width:100%;
+  max-height:550px;
+  background:#000;
+}
 
-.formRow{
+.playerInfo{
+  padding:10px;
+  color:#638a72;
+  font-size:10px;
+}
+
+/* ================= ADMIN ================= */
+
+.adminGrid{
   display:grid;
-  grid-template-columns:1fr 2fr auto;
-  gap:10px;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+  margin-bottom:20px;
 }
 
-.formRow input{
-  padding:12px;
-  background:#050907;
-  border:1px solid #274a34;
-  color:white;
-  border-radius:7px;
+.adminForm{
+  border:1px solid var(--border);
+  padding:18px;
+  background:#041009;
 }
 
-.actionBtn{
-  padding:12px 18px;
-  background:#62ff9b;
-  color:#041008;
-  border:0;
-  border-radius:7px;
-  cursor:pointer;
-  font-weight:bold;
+.adminForm h3{
+  color:var(--green);
+  font-size:13px;
+  margin-bottom:15px;
+}
+
+.adminInput{
+  width:100%;
+  padding:11px;
+  background:#010503;
+  border:1px solid var(--border);
+  color:var(--green);
+  font-family:inherit;
+  margin-bottom:10px;
+  outline:none;
+}
+
+.tableWrap{
+  overflow-x:auto;
+  border:1px solid var(--border);
 }
 
 table{
   width:100%;
   border-collapse:collapse;
-  font-size:12px;
+  min-width:600px;
 }
 
-th,
-td{
+th,td{
+  padding:11px;
   text-align:left;
-  padding:12px 8px;
-  border-bottom:1px solid #18301f;
+  border-bottom:1px solid rgba(0,255,136,.1);
+  font-size:11px;
 }
 
 th{
-  color:#72ffa7;
+  color:var(--green);
+  background:#06120b;
+}
+
+td{
+  color:#91b9a0;
 }
 
 .deleteBtn{
-  background:#211010;
-  border:1px solid #572626;
-  color:#ff8989;
-  padding:7px 10px;
-  border-radius:6px;
+  border:1px solid rgba(255,73,111,.4);
+  background:transparent;
+  color:var(--danger);
+  padding:6px 9px;
   cursor:pointer;
+  font-family:inherit;
 }
 
-/* JSON */
-
-textarea{
-  width:100%;
-  min-height:260px;
-  resize:vertical;
-  background:#020403;
-  color:#7dffa9;
-  border:1px solid #193323;
-  padding:15px;
-  border-radius:8px;
-  font-family:monospace;
-  outline:none;
-}
-
-.status{
+.adminMsg{
   margin-top:10px;
-  font-size:12px;
+  color:#668d74;
+  font-size:11px;
 }
 
-/* MOBILE */
+/* ================= DOWNLOADS ================= */
+
+.downloadBox{
+  border:1px dashed var(--border);
+  padding:35px;
+  text-align:center;
+  color:#668d74;
+}
+
+.downloadBox strong{
+  display:block;
+  color:var(--green);
+  margin-bottom:10px;
+}
+
+/* ================= RESPONSIVE ================= */
 
 @media(max-width:900px){
-
-  .cards{
+  .grid{
     grid-template-columns:repeat(2,1fr);
   }
 
-  .videoGrid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  aside{
-    width:180px;
+  .infoGrid{
+    grid-template-columns:1fr 1fr;
   }
 }
 
-@media(max-width:650px){
-
-  header{
+@media(max-width:700px){
+  .header{
     padding:0 12px;
   }
 
-  .headerLogo{
-    font-size:13px;
-  }
-
-  .userInfo{
-    font-size:10px;
-    gap:7px;
+  .headerRight{
+    gap:8px;
   }
 
   .layout{
     display:block;
   }
 
-  aside{
+  .sidebar{
     width:100%;
     border-right:0;
-    border-bottom:1px solid #193323;
+    border-bottom:1px solid var(--border);
     display:flex;
     overflow-x:auto;
-    gap:6px;
     padding:8px;
+    gap:5px;
+  }
+
+  .navTitle{
+    display:none;
   }
 
   .navBtn{
     min-width:max-content;
-    width:auto;
     margin:0;
   }
 
-  main{
+  .main{
     padding:15px;
   }
 
-  .cards,
-  .videoGrid,
-  .grid2{
+  .grid,
+  .infoGrid,
+  .adminGrid{
     grid-template-columns:1fr;
   }
 
-  .formRow{
-    grid-template-columns:1fr;
+  .brand h1{
+    font-size:28px;
   }
 
-  .loginCard{
-    padding:22px;
+  .logo{
+    font-size:40px;
   }
 }
 </style>
@@ -563,23 +751,25 @@ textarea{
 
 <body>
 
-<!-- BOOT -->
+<!-- ================= BOOT ================= -->
 
 <div id="boot">
   <div class="bootBox">
     <div class="logo">AXOM</div>
-    <div class="bootText">INITIALIZING SECURITY CONSOLE...</div>
+
+    <div id="bootText" class="bootText"></div>
 
     <div class="progress">
       <div id="progressBar" class="progressBar"></div>
     </div>
+
+    <div id="bootPercent" class="bootPercent">0%</div>
   </div>
 </div>
 
+<!-- ================= LOGIN ================= -->
 
-<!-- LOGIN -->
-
-<section id="login" class="hidden">
+<section id="login">
 
   <div class="loginCard">
 
@@ -588,7 +778,9 @@ textarea{
       <p>SECURITY CONSOLE</p>
     </div>
 
-    <h2>Welcome Back</h2>
+    <div class="welcome">
+      Welcome Back
+    </div>
 
     <form id="loginForm">
 
@@ -598,6 +790,7 @@ textarea{
           id="username"
           type="text"
           autocomplete="username"
+          placeholder="Enter username"
           required
         >
       </div>
@@ -610,43 +803,36 @@ textarea{
             id="password"
             type="password"
             autocomplete="current-password"
+            placeholder="Enter password"
             required
           >
 
           <button
-            type="button"
             id="showPassword"
-          >
-            👁
-          </button>
+            class="showPass"
+            type="button"
+          >SHOW</button>
         </div>
       </div>
 
       <label class="remember">
-        <input
-          id="remember"
-          type="checkbox"
-        >
+        <input id="remember" type="checkbox">
         Remember session
       </label>
 
-      <button
-        class="loginBtn"
-        type="submit"
-      >
+      <button id="loginBtn" class="loginBtn" type="submit">
         ACCESS CONSOLE
       </button>
 
-      <div
-        id="loginError"
-        class="loginError"
-      ></div>
+      <div id="loginError" class="loginError"></div>
 
     </form>
 
+    <div class="securityTag">
+      AES-256 // SECURE AUTHENTICATION
+    </div>
+
     <div class="footer">
-      AES-256 • SECURE SESSION
-      <br><br>
       DEVELOPED BY RISINDU
     </div>
 
@@ -654,547 +840,505 @@ textarea{
 
 </section>
 
+<!-- ================= APP ================= -->
 
-<!-- APP -->
+<section id="app">
 
-<section id="app" class="hidden">
+  <header class="header">
 
-<header>
-
-  <div class="headerLogo">
-    AXOM // SECURITY CONSOLE
-  </div>
-
-  <div class="userInfo">
-    <span id="currentUser"></span>
-
-    <button
-      class="logout"
-      onclick="logout()"
-    >
-      LOGOUT
-    </button>
-  </div>
-
-</header>
-
-
-<div class="layout">
-
-<aside>
-
-  <button
-    class="navBtn active"
-    data-page="dashboard"
-    onclick="page('dashboard')"
-  >
-    Dashboard
-  </button>
-
-  <button
-    class="navBtn"
-    data-page="network"
-    onclick="page('network')"
-  >
-    Network
-  </button>
-
-  <button
-    class="navBtn"
-    data-page="tools"
-    onclick="page('tools')"
-  >
-    Tools
-  </button>
-
-  <button
-    class="navBtn"
-    data-page="videos"
-    onclick="page('videos')"
-  >
-    Videos
-  </button>
-
-  <button
-    class="navBtn"
-    data-page="downloads"
-    onclick="page('downloads')"
-  >
-    Download Library
-  </button>
-
-  <button
-    id="adminNavigation"
-    class="navBtn hidden"
-    data-page="admin"
-    onclick="page('admin')"
-  >
-    Admin Panel
-  </button>
-
-</aside>
-
-
-<main>
-
-<!-- DASHBOARD -->
-
-<div
-  id="dashboardPage"
-  class="page"
->
-
-  <h1 class="pageTitle">
-    Dashboard
-  </h1>
-
-  <div class="cards">
-
-    <div class="card">
-      <div class="cardLabel">SESSION</div>
-      <div
-        id="sessionStatus"
-        class="cardValue"
-      >
-        ACTIVE
-      </div>
+    <div class="headerLogo">
+      AXOM // CONSOLE
     </div>
 
-    <div class="card">
-      <div class="cardLabel">CPU</div>
-      <div
-        id="cpu"
-        class="cardValue"
-      >
-        --%
-      </div>
+    <div class="headerRight">
+      <span>
+        <span class="statusDot"></span>
+        ONLINE
+      </span>
+
+      <span id="headerUser">USER</span>
+
+      <button class="logoutBtn" onclick="logout()">
+        LOGOUT
+      </button>
     </div>
 
-    <div class="card">
-      <div class="cardLabel">MEMORY</div>
-      <div
-        id="memory"
-        class="cardValue"
-      >
-        --%
-      </div>
-    </div>
+  </header>
 
-    <div class="card">
-      <div class="cardLabel">UPTIME</div>
-      <div
-        id="uptime"
-        class="cardValue"
-      >
-        00:00:00
-      </div>
-    </div>
+  <div class="layout">
 
-  </div>
+    <aside class="sidebar">
 
+      <div class="navTitle">SYSTEM</div>
 
-  <div class="panel">
-
-    <div class="panelTitle">
-      SYSTEM TERMINAL
-    </div>
-
-    <div
-      id="terminal"
-      class="terminal"
-    ></div>
-
-  </div>
-
-</div>
-
-
-<!-- NETWORK -->
-
-<div
-  id="networkPage"
-  class="page hidden"
->
-
-  <h1 class="pageTitle">
-    Network
-  </h1>
-
-  <div class="grid2">
-
-    <div class="panel">
-
-      <div class="panelTitle">
-        CONNECTION
-      </div>
-
-      <div class="infoRow">
-        <span>Status</span>
-        <span
-          id="connection"
-          class="value"
-        >
-          Checking...
-        </span>
-      </div>
-
-      <div class="infoRow">
-        <span>Public IP</span>
-        <span
-          id="publicIP"
-          class="value"
-        >
-          Loading...
-        </span>
-      </div>
-
-    </div>
-
-
-    <div class="panel">
-
-      <div class="panelTitle">
-        CLIENT
-      </div>
-
-      <div class="infoRow">
-        <span>Platform</span>
-        <span
-          id="platform"
-          class="value"
-        >
-          -
-        </span>
-      </div>
-
-      <div class="infoRow">
-        <span>Language</span>
-        <span
-          id="language"
-          class="value"
-        >
-          -
-        </span>
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- TOOLS -->
-
-<div
-  id="toolsPage"
-  class="page hidden"
->
-
-  <h1 class="pageTitle">
-    Tools
-  </h1>
-
-  <div class="panel">
-
-    <div class="panelTitle">
-      LOCAL JSON VIEWER
-    </div>
-
-    <textarea
-      id="jsonInput"
-      placeholder='Paste JSON here...'
-    ></textarea>
-
-    <br><br>
-
-    <button
-      class="actionBtn"
-      onclick="formatJSON()"
-    >
-      FORMAT JSON
-    </button>
-
-    <div
-      id="jsonStatus"
-      class="status"
-    ></div>
-
-  </div>
-
-</div>
-
-
-<!-- VIDEOS -->
-
-<div
-  id="videosPage"
-  class="page hidden"
->
-
-  <h1 class="pageTitle">
-    Video Library
-  </h1>
-
-  <div
-    id="videoGrid"
-    class="videoGrid"
-  ></div>
-
-
-  <div
-    id="videoPlayerPanel"
-    class="panel hidden"
-  >
-
-    <div class="panelTitle">
-      VIDEO PLAYER
-    </div>
-
-    <video
-      id="videoPlayer"
-      controls
-      playsinline
-    ></video>
-
-  </div>
-
-</div>
-
-
-<!-- DOWNLOADS -->
-
-<div
-  id="downloadsPage"
-  class="page hidden"
->
-
-  <h1 class="pageTitle">
-    Download Library
-  </h1>
-
-  <div class="panel">
-
-    <div class="panelTitle">
-      RESOURCES
-    </div>
-
-    <p>
-      Your downloadable resources can be added here.
-    </p>
-
-  </div>
-
-</div>
-
-
-<!-- ADMIN -->
-
-<div
-  id="adminPage"
-  class="page hidden"
->
-
-  <h1 class="pageTitle">
-    Admin Panel
-  </h1>
-
-
-  <div class="cards">
-
-    <div class="card">
-      <div class="cardLabel">USERS</div>
-      <div
-        id="userCount"
-        class="cardValue"
-      >
-        0
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="cardLabel">VIDEOS</div>
-      <div
-        id="adminVideoCount"
-        class="cardValue"
-      >
-        0
-      </div>
-    </div>
-
-  </div>
-
-
-  <div class="panel">
-
-    <div class="panelTitle">
-      ADD VIDEO
-    </div>
-
-    <div class="formRow">
-
-      <input
-        id="videoTitle"
-        placeholder="Video title"
-      >
-
-      <input
-        id="videoURL"
-        placeholder="Video URL"
-      >
-
-      <button
-        class="actionBtn"
-        onclick="addVideo()"
-      >
-        ADD VIDEO
+      <button class="navBtn active" data-page="dashboard" onclick="page('dashboard')">
+        ▣ DASHBOARD
       </button>
 
-    </div>
+      <button class="navBtn" data-page="network" onclick="page('network')">
+        ◈ NETWORK
+      </button>
 
-    <div
-      id="adminStatus"
-      class="status"
-    ></div>
+      <button class="navBtn" data-page="tools" onclick="page('tools')">
+        ◉ TOOLS
+      </button>
+
+      <button class="navBtn" data-page="videos" onclick="page('videos')">
+        ▶ VIDEOS
+      </button>
+
+      <button class="navBtn" data-page="downloads" onclick="page('downloads')">
+        ↓ DOWNLOAD LIBRARY
+      </button>
+
+      <button
+        id="adminNav"
+        class="navBtn adminOnly"
+        data-page="admin"
+        onclick="page('admin')"
+      >
+        ⚙ ADMIN PANEL
+      </button>
+
+    </aside>
+
+    <main class="main">
+
+      <!-- ================= DASHBOARD ================= -->
+
+      <section id="dashboard" class="page active">
+
+        <div class="pageTitle">
+          DASHBOARD
+        </div>
+
+        <div class="grid">
+
+          <div class="card">
+            <div class="cardTitle">SESSION</div>
+            <div id="sessionUser" class="cardValue">---</div>
+            <div class="cardSmall">Authenticated user</div>
+          </div>
+
+          <div class="card">
+            <div class="cardTitle">CPU</div>
+            <div id="cpu" class="cardValue">--%</div>
+            <div class="cardSmall">Simulated system monitor</div>
+          </div>
+
+          <div class="card">
+            <div class="cardTitle">MEMORY</div>
+            <div id="memory" class="cardValue">--%</div>
+            <div class="cardSmall">Simulated memory monitor</div>
+          </div>
+
+          <div class="card">
+            <div class="cardTitle">UPTIME</div>
+            <div id="uptime" class="cardValue">00:00:00</div>
+            <div class="cardSmall">Console session</div>
+          </div>
+
+        </div>
+
+        <div class="terminal">
+
+          <div class="terminalHead">
+            AXOM TERMINAL // LOCAL CONSOLE
+          </div>
+
+          <div id="terminalBody" class="terminalBody">
+<span class="prompt">axom@console:~$</span> system initialized
+<span class="prompt">axom@console:~$</span> authentication channel established
+<span class="prompt">axom@console:~$</span> security console ready
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ================= NETWORK ================= -->
+
+      <section id="network" class="page">
+
+        <div class="pageTitle">
+          NETWORK
+        </div>
+
+        <div class="infoGrid">
+
+          <div class="infoBox">
+            <span>PUBLIC IP</span>
+            <strong id="publicIP">Loading...</strong>
+          </div>
+
+          <div class="infoBox">
+            <span>PLATFORM</span>
+            <strong id="platform">---</strong>
+          </div>
+
+          <div class="infoBox">
+            <span>LANGUAGE</span>
+            <strong id="language">---</strong>
+          </div>
+
+          <div class="infoBox">
+            <span>CONNECTION</span>
+            <strong id="connectionStatus">CHECKING...</strong>
+          </div>
+
+          <div class="infoBox">
+            <span>BROWSER</span>
+            <strong id="browser">---</strong>
+          </div>
+
+          <div class="infoBox">
+            <span>COOKIES</span>
+            <strong id="cookies">---</strong>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ================= TOOLS ================= -->
+
+      <section id="tools" class="page">
+
+        <div class="pageTitle">
+          TOOLS
+        </div>
+
+        <div class="card">
+
+          <div class="cardTitle">
+            LOCAL JSON VIEWER
+          </div>
+
+          <textarea
+            id="jsonInput"
+            placeholder='Paste JSON here...
+Example:
+{
+  "status": "online",
+  "system": "AXOM"
+}'
+          ></textarea>
+
+          <div class="toolButtons">
+            <button class="toolBtn" onclick="formatJSON()">
+              FORMAT JSON
+            </button>
+
+            <button class="toolBtn" onclick="clearJSON()">
+              CLEAR
+            </button>
+          </div>
+
+          <div id="toolStatus" class="toolStatus"></div>
+
+        </div>
+
+      </section>
+
+      <!-- ================= VIDEOS ================= -->
+
+      <section id="videos" class="page">
+
+        <div class="pageTitle">
+          VIDEO LIBRARY
+        </div>
+
+        <div id="videoGrid" class="videoGrid">
+          <div class="videoEmpty">
+            Loading video library...
+          </div>
+        </div>
+
+        <div id="playerWrap" class="playerWrap">
+
+          <video
+            id="videoPlayer"
+            controls
+            playsinline
+          ></video>
+
+          <div id="playerInfo" class="playerInfo">
+            Select a video
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ================= DOWNLOADS ================= -->
+
+      <section id="downloads" class="page">
+
+        <div class="pageTitle">
+          DOWNLOAD LIBRARY
+        </div>
+
+        <div class="downloadBox">
+
+          <strong>
+            DOWNLOAD LIBRARY
+          </strong>
+
+          Files and resources can be added here later.
+
+        </div>
+
+      </section>
+
+      <!-- ================= ADMIN ================= -->
+
+      <section id="admin" class="page">
+
+        <div class="pageTitle">
+          ADMIN PANEL
+        </div>
+
+        <div class="grid">
+
+          <div class="card">
+            <div class="cardTitle">TOTAL USERS</div>
+            <div id="userCount" class="cardValue">0</div>
+          </div>
+
+          <div class="card">
+            <div class="cardTitle">TOTAL VIDEOS</div>
+            <div id="adminVideoCount" class="cardValue">0</div>
+          </div>
+
+        </div>
+
+        <br>
+
+        <div class="adminGrid">
+
+          <div class="adminForm">
+
+            <h3>
+              ADD VIDEO
+            </h3>
+
+            <input
+              id="videoTitle"
+              class="adminInput"
+              type="text"
+              placeholder="Video title"
+            >
+
+            <input
+              id="videoURL"
+              class="adminInput"
+              type="url"
+              placeholder="Video URL"
+            >
+
+            <button class="addBtn" onclick="addVideo()">
+              ADD VIDEO
+            </button>
+
+            <div id="adminMsg" class="adminMsg"></div>
+
+          </div>
+
+        </div>
+
+        <div class="adminForm">
+
+          <h3>
+            VIDEO MANAGEMENT
+          </h3>
+
+          <div class="tableWrap">
+
+            <table>
+
+              <thead>
+                <tr>
+                  <th>TITLE</th>
+                  <th>CREATED</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+
+              <tbody id="adminVideosTable">
+                <tr>
+                  <td colspan="3">Loading...</td>
+                </tr>
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+        <br>
+
+        <div class="adminForm">
+
+          <h3>
+            USERS
+          </h3>
+
+          <div class="tableWrap">
+
+            <table>
+
+              <thead>
+                <tr>
+                  <th>USERNAME</th>
+                  <th>ROLE</th>
+                  <th>CREATED</th>
+                </tr>
+              </thead>
+
+              <tbody id="usersTable">
+                <tr>
+                  <td colspan="3">Loading...</td>
+                </tr>
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
 
   </div>
-
-
-  <div class="panel">
-
-    <div class="panelTitle">
-      VIDEO MANAGEMENT
-    </div>
-
-    <div id="adminVideos"></div>
-
-  </div>
-
-
-  <div class="panel">
-
-    <div class="panelTitle">
-      USERS
-    </div>
-
-    <div style="overflow:auto">
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Role</th>
-            <th>Created</th>
-          </tr>
-        </thead>
-
-        <tbody id="usersTable"></tbody>
-
-      </table>
-
-    </div>
-
-  </div>
-
-</div>
-
-</main>
-
-</div>
 
 </section>
 
-
 <script>
+/* =========================================================
+   AXOM CONFIG
+========================================================= */
 
-/*
-  IMPORTANT:
-  After Render deploys your backend,
-  replace this URL with your real Render URL.
-*/
-
-const API_URL =
-  "https://YOUR-RENDER-BACKEND.onrender.com";
-
+const API_URL = "https://risindu.onrender.com";
 
 let currentUser = null;
 let startTime = Date.now();
+let dashboardTimer = null;
 
 
-/* HELPERS */
+/* =========================================================
+   SECURITY HELPERS
+========================================================= */
 
 function escapeHTML(value){
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
 
-  return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+
+function getStoredAuth(){
+
+  const local = localStorage.getItem("axom_auth");
+
+  if(local){
+    try{
+      return JSON.parse(local);
+    }catch{
+      localStorage.removeItem("axom_auth");
+    }
+  }
+
+  const session = sessionStorage.getItem("axom_auth");
+
+  if(session){
+    try{
+      return JSON.parse(session);
+    }catch{
+      sessionStorage.removeItem("axom_auth");
+    }
+  }
+
+  return null;
 }
 
 
 function getToken(){
 
-  return localStorage.getItem(
-    "axom_token"
-  );
+  const auth = getStoredAuth();
+
+  return auth?.token || null;
 }
 
 
 function getStoredUser(){
 
-  try{
+  const auth = getStoredAuth();
 
-    return JSON.parse(
-      localStorage.getItem(
-        "axom_user"
-      )
-    );
-
-  }catch{
-
-    return null;
-  }
+  return auth?.user || null;
 }
 
 
-async function api(
-  endpoint,
-  options={}
-){
+/* =========================================================
+   API
+========================================================= */
+
+async function api(path, options = {}){
 
   const headers = {
-    "Content-Type":"application/json",
     ...(options.headers || {})
   };
 
   const token = getToken();
 
   if(token){
-
-    headers.Authorization =
-      `Bearer ${token}`;
+    headers.Authorization = "Bearer " + token;
   }
 
-  const response =
-    await fetch(
-      API_URL + endpoint,
-      {
-        ...options,
-        headers
-      }
-    );
+  if(
+    options.body &&
+    typeof options.body === "object" &&
+    !(options.body instanceof FormData)
+  ){
+    headers["Content-Type"] = "application/json";
+    options.body = JSON.stringify(options.body);
+  }
 
-  const data =
-    await response.json()
-      .catch(() => ({}));
+  const response = await fetch(API_URL + path,{
+    ...options,
+    headers
+  });
+
+  let data = null;
+
+  try{
+    data = await response.json();
+  }catch{
+    data = {};
+  }
+
+  if(response.status === 401){
+
+    localStorage.removeItem("axom_auth");
+    sessionStorage.removeItem("axom_auth");
+
+    currentUser = null;
+
+    showLogin();
+
+    throw new Error("Session expired");
+  }
 
   if(!response.ok){
 
     throw new Error(
-      data.error ||
+      data?.error ||
+      data?.message ||
       `Request failed (${response.status})`
     );
   }
@@ -1203,218 +1347,292 @@ async function api(
 }
 
 
-/* BOOT */
+/* =========================================================
+   BOOT SYSTEM
+========================================================= */
 
-let progress = 0;
+const bootMessages = [
+  "AXOM BIOS CHECK .............. OK",
+  "LOADING SECURITY MODULES ..... OK",
+  "INITIALIZING NETWORK ........ OK",
+  "CHECKING AUTH CHANNEL ........ OK",
+  "LOADING CONSOLE CORE ......... OK",
+  "VERIFYING DATABASE LINK ...... OK",
+  "STARTING AXOM SECURITY OS .... OK"
+];
 
-const bootTimer =
-  setInterval(() => {
 
-    progress +=
-      Math.floor(
-        Math.random()*15
-      ) + 5;
+async function runBoot(){
 
-    if(progress > 100)
-      progress = 100;
+  const bar = document.getElementById("progressBar");
+  const percent = document.getElementById("bootPercent");
+  const text = document.getElementById("bootText");
 
-    document
-      .getElementById("progressBar")
-      .style.width =
-      progress + "%";
+  let progress = 0;
 
-    if(progress >= 100){
+  for(let i = 0; i < bootMessages.length; i++){
 
-      clearInterval(
-        bootTimer
-      );
+    text.textContent +=
+      (i ? "\n" : "") +
+      "> " +
+      bootMessages[i];
 
-      setTimeout(
-        showInitialScreen,
-        400
-      );
+    const target = Math.round(
+      ((i + 1) / bootMessages.length) * 90
+    );
+
+    while(progress < target){
+
+      progress++;
+
+      bar.style.width = progress + "%";
+      percent.textContent = progress + "%";
+
+      await new Promise(r => setTimeout(r,12));
     }
 
-  },180);
+    await new Promise(r => setTimeout(r,120));
+  }
 
 
-function showInitialScreen(){
+  /* backend health check */
 
-  document
-    .getElementById("boot")
-    .classList.add("hidden");
+  try{
 
-  const token =
-    getToken();
+    text.textContent += "\n> CONNECTING TO AXOM BACKEND...";
 
-  const user =
-    getStoredUser();
+    const response = await fetch(
+      API_URL + "/api/health",
+      {cache:"no-store"}
+    );
 
-  if(token && user){
+    if(response.ok){
 
-    currentUser = user;
+      text.textContent +=
+        "\n> BACKEND CONNECTION ........ OK";
+
+    }else{
+
+      text.textContent +=
+        "\n> BACKEND STATUS ............. " +
+        response.status;
+    }
+
+  }catch(error){
+
+    text.textContent +=
+      "\n> BACKEND CONNECTION ........ OFFLINE";
+  }
+
+
+  while(progress < 100){
+
+    progress++;
+
+    bar.style.width = progress + "%";
+    percent.textContent = progress + "%";
+
+    await new Promise(r => setTimeout(r,15));
+  }
+
+
+  await new Promise(r => setTimeout(r,450));
+
+  document.getElementById("boot").style.display = "none";
+
+  const storedUser = getStoredUser();
+
+  if(storedUser && getToken()){
+
+    currentUser = storedUser;
 
     showApp();
 
   }else{
 
-    document
-      .getElementById("login")
-      .classList.remove("hidden");
+    showLogin();
   }
 }
 
 
-/* PASSWORD */
+/* =========================================================
+   LOGIN
+========================================================= */
 
-document
-  .getElementById("showPassword")
-  .addEventListener(
-    "click",
-    () => {
+function showLogin(){
 
-      const input =
-        document.getElementById(
-          "password"
-        );
+  document.getElementById("app").style.display = "none";
 
-      input.type =
-        input.type === "password"
-        ? "text"
-        : "password";
-    }
-  );
+  document.getElementById("login").style.display = "flex";
 
+}
 
-/* LOGIN */
-
-document
-  .getElementById("loginForm")
-  .addEventListener(
-    "submit",
-    async event => {
-
-      event.preventDefault();
-
-      const username =
-        document
-          .getElementById("username")
-          .value
-          .trim();
-
-      const password =
-        document
-          .getElementById("password")
-          .value;
-
-      const error =
-        document
-          .getElementById("loginError");
-
-      error.textContent =
-        "Authenticating...";
-
-      try{
-
-        const data =
-          await api(
-            "/api/auth/login",
-            {
-              method:"POST",
-              body:JSON.stringify({
-                username,
-                password
-              })
-            }
-          );
-
-        localStorage.setItem(
-          "axom_token",
-          data.token
-        );
-
-        localStorage.setItem(
-          "axom_user",
-          JSON.stringify(data.user)
-        );
-
-        currentUser =
-          data.user;
-
-        if(
-          !document
-            .getElementById("remember")
-            .checked
-        ){
-
-          sessionStorage.setItem(
-            "axom_session",
-            "1"
-          );
-        }
-
-        error.textContent = "";
-
-        showApp();
-
-      }catch(err){
-
-        error.textContent =
-          err.message;
-      }
-    }
-  );
-
-
-/* APP */
 
 function showApp(){
 
-  document
-    .getElementById("login")
-    .classList.add("hidden");
+  document.getElementById("login").style.display = "none";
 
-  document
-    .getElementById("app")
-    .classList.remove("hidden");
+  document.getElementById("app").style.display = "block";
 
-  document
-    .getElementById("currentUser")
-    .textContent =
-    `${currentUser.username} • ${currentUser.role}`;
+  document.getElementById("headerUser").textContent =
+    currentUser?.username || "USER";
 
-  const admin =
-    document.getElementById(
-      "adminNavigation"
-    );
+  document.getElementById("sessionUser").textContent =
+    currentUser?.username || "USER";
 
-  if(currentUser.role === "admin"){
 
-    admin.classList.remove(
-      "hidden"
-    );
+  const adminNav = document.getElementById("adminNav");
+
+  if(currentUser?.role === "admin"){
+
+    adminNav.style.display = "block";
 
   }else{
 
-    admin.classList.add(
-      "hidden"
-    );
+    adminNav.style.display = "none";
   }
 
-  page("dashboard");
 
   loadNetwork();
   loadVideos();
 
-  if(currentUser.role === "admin"){
+  if(currentUser?.role === "admin"){
     loadAdmin();
   }
 
   startDashboard();
+
 }
 
 
-/* PAGE NAVIGATION */
+document
+.getElementById("loginForm")
+.addEventListener("submit",async function(event){
+
+  event.preventDefault();
+
+  const username =
+    document.getElementById("username").value.trim();
+
+  const password =
+    document.getElementById("password").value;
+
+  const remember =
+    document.getElementById("remember").checked;
+
+  const btn =
+    document.getElementById("loginBtn");
+
+  const error =
+    document.getElementById("loginError");
+
+
+  error.textContent = "";
+
+  btn.disabled = true;
+  btn.textContent = "AUTHENTICATING...";
+
+
+  try{
+
+    const result = await api("/api/auth/login",{
+      method:"POST",
+      body:{
+        username,
+        password
+      }
+    });
+
+
+    if(!result?.token || !result?.user){
+
+      throw new Error("Invalid server response");
+    }
+
+
+    const authData = {
+      token:result.token,
+      user:result.user
+    };
+
+
+    /*
+      Remember checked:
+      localStorage
+
+      Remember unchecked:
+      sessionStorage
+    */
+
+    localStorage.removeItem("axom_auth");
+    sessionStorage.removeItem("axom_auth");
+
+
+    if(remember){
+
+      localStorage.setItem(
+        "axom_auth",
+        JSON.stringify(authData)
+      );
+
+    }else{
+
+      sessionStorage.setItem(
+        "axom_auth",
+        JSON.stringify(authData)
+      );
+    }
+
+
+    currentUser = result.user;
+
+    startTime = Date.now();
+
+    showApp();
+
+
+  }catch(err){
+
+    error.textContent =
+      err.message || "Authentication failed";
+
+  }finally{
+
+    btn.disabled = false;
+    btn.textContent = "ACCESS CONSOLE";
+  }
+
+});
+
+
+/* =========================================================
+   SHOW PASSWORD
+========================================================= */
+
+document
+.getElementById("showPassword")
+.addEventListener("click",function(){
+
+  const password =
+    document.getElementById("password");
+
+  if(password.type === "password"){
+
+    password.type = "text";
+    this.textContent = "HIDE";
+
+  }else{
+
+    password.type = "password";
+    this.textContent = "SHOW";
+  }
+
+});
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
 
 function page(name){
 
@@ -1422,185 +1640,171 @@ function page(name){
     name === "admin" &&
     currentUser?.role !== "admin"
   ){
+
+    alert("Admin access required.");
     return;
   }
 
+
   document
     .querySelectorAll(".page")
-    .forEach(
-      element =>
-        element.classList.add(
-          "hidden"
-        )
-    );
+    .forEach(el => el.classList.remove("active"));
+
 
   const target =
-    document.getElementById(
-      name + "Page"
-    );
+    document.getElementById(name);
 
-  if(target)
-    target.classList.remove(
-      "hidden"
-    );
+  if(!target) return;
+
+  target.classList.add("active");
+
 
   document
     .querySelectorAll(".navBtn")
-    .forEach(button => {
+    .forEach(btn => {
 
-      button.classList.toggle(
+      btn.classList.toggle(
         "active",
-        button.dataset.page === name
+        btn.dataset.page === name
       );
 
     });
+
+
+  if(name === "network"){
+    loadNetwork();
+  }
 
   if(name === "videos"){
     loadVideos();
   }
 
-  if(name === "admin" &&
-     currentUser.role === "admin"){
+  if(name === "admin"){
 
-    loadAdmin();
+    if(currentUser?.role === "admin"){
+      loadAdmin();
+    }
   }
+
 }
 
 
-/* DASHBOARD */
+/* =========================================================
+   DASHBOARD
+========================================================= */
 
 function startDashboard(){
 
-  setInterval(() => {
+  if(dashboardTimer){
+    clearInterval(dashboardTimer);
+  }
+
+
+  startTime = Date.now();
+
+
+  dashboardTimer = setInterval(()=>{
 
     const cpu =
-      Math.floor(
-        Math.random()*55
-      ) + 10;
+      Math.floor(10 + Math.random() * 65);
 
     const memory =
-      Math.floor(
-        Math.random()*40
-      ) + 30;
+      Math.floor(25 + Math.random() * 55);
 
-    document
-      .getElementById("cpu")
-      .textContent =
+    document.getElementById("cpu").textContent =
       cpu + "%";
 
-    document
-      .getElementById("memory")
-      .textContent =
+    document.getElementById("memory").textContent =
       memory + "%";
 
-    const elapsed =
+
+    const seconds =
       Math.floor(
-        (Date.now()-startTime)/1000
+        (Date.now() - startTime) / 1000
       );
 
+
     const h =
-      String(
-        Math.floor(elapsed/3600)
-      ).padStart(2,"0");
+      String(Math.floor(seconds / 3600))
+      .padStart(2,"0");
 
     const m =
-      String(
-        Math.floor(
-          (elapsed%3600)/60
-        )
-      ).padStart(2,"0");
+      String(Math.floor((seconds % 3600) / 60))
+      .padStart(2,"0");
 
     const s =
-      String(
-        elapsed%60
-      ).padStart(2,"0");
+      String(seconds % 60)
+      .padStart(2,"0");
 
-    document
-      .getElementById("uptime")
-      .textContent =
+
+    document.getElementById("uptime").textContent =
       `${h}:${m}:${s}`;
 
   },1000);
 
-
-  const terminal =
-    document.getElementById(
-      "terminal"
-    );
-
-  const lines = [
-    "[OK] AXOM console initialized",
-    "[OK] Authentication module ready",
-    "[OK] Session established",
-    "[OK] Network monitor ready",
-    "[OK] Security services online"
-  ];
-
-  terminal.innerHTML =
-    lines.map(
-      line =>
-        `<div class="line">${escapeHTML(line)}</div>`
-    ).join("");
 }
 
 
-/* NETWORK */
+/* =========================================================
+   NETWORK
+========================================================= */
 
 async function loadNetwork(){
 
-  document
-    .getElementById("platform")
-    .textContent =
+  document.getElementById("platform").textContent =
     navigator.platform || "Unknown";
 
-  document
-    .getElementById("language")
-    .textContent =
+  document.getElementById("language").textContent =
     navigator.language || "Unknown";
 
-  document
-    .getElementById("connection")
-    .textContent =
-    navigator.onLine
-    ? "ONLINE"
-    : "OFFLINE";
+  document.getElementById("browser").textContent =
+    navigator.userAgent;
+
+  document.getElementById("cookies").textContent =
+    navigator.cookieEnabled ? "ENABLED" : "DISABLED";
+
+  document.getElementById("connectionStatus").textContent =
+    navigator.onLine ? "ONLINE" : "OFFLINE";
+
+
+  const ipElement =
+    document.getElementById("publicIP");
 
   try{
 
     const response =
       await fetch(
-        "https://api.ipify.org?format=json"
+        "https://api.ipify.org?format=json",
+        {cache:"no-store"}
       );
 
     const data =
       await response.json();
 
-    document
-      .getElementById("publicIP")
-      .textContent =
-      data.ip;
+    ipElement.textContent =
+      data.ip || "Unavailable";
 
   }catch{
 
-    document
-      .getElementById("publicIP")
-      .textContent =
+    ipElement.textContent =
       "Unavailable";
   }
+
 }
 
 
-/* JSON TOOL */
+/* =========================================================
+   JSON TOOL
+========================================================= */
 
 function formatJSON(){
 
   const input =
-    document
-      .getElementById("jsonInput");
+    document.getElementById("jsonInput");
 
   const status =
-    document
-      .getElementById("jsonStatus");
+    document.getElementById("toolStatus");
+
 
   try{
 
@@ -1608,367 +1812,535 @@ function formatJSON(){
       JSON.parse(input.value);
 
     input.value =
-      JSON.stringify(
-        parsed,
-        null,
-        2
-      );
+      JSON.stringify(parsed,null,2);
 
     status.textContent =
-      "Valid JSON.";
+      "✓ Valid JSON";
 
-  }catch{
+  }catch(error){
 
     status.textContent =
-      "Invalid JSON.";
+      "✕ Invalid JSON: " + error.message;
   }
+
 }
 
 
-/* VIDEOS */
+function clearJSON(){
+
+  document.getElementById("jsonInput").value = "";
+
+  document.getElementById("toolStatus").textContent =
+    "";
+}
+
+
+/* =========================================================
+   VIDEOS
+========================================================= */
 
 async function loadVideos(){
 
   const grid =
-    document.getElementById(
-      "videoGrid"
-    );
-
-  grid.innerHTML =
-    "<div>Loading...</div>";
+    document.getElementById("videoGrid");
 
   try{
 
+    const data =
+      await api("/api/videos");
+
     const videos =
-      await api(
-        "/api/videos"
-      );
+      Array.isArray(data)
+        ? data
+        : data.videos || [];
 
-    if(!videos.length){
 
-      grid.innerHTML =
-        "<div>No videos available.</div>";
+    if(videos.length === 0){
+
+      grid.innerHTML = `
+        <div class="videoEmpty">
+          No videos available.
+        </div>
+      `;
 
       return;
     }
 
+
     grid.innerHTML =
-      videos.map(
-        video => `
-          <div class="videoCard">
+      videos.map(video => `
 
-            <div class="videoThumb">
-              ▶
+        <div class="videoCard">
+
+          <div class="videoThumb">
+            ▶
+          </div>
+
+          <div class="videoBody">
+
+            <div class="videoTitle">
+              ${escapeHTML(video.title)}
             </div>
 
-            <div class="videoBody">
-
-              <h3>
-                ${escapeHTML(
-                  video.title
-                )}
-              </h3>
-
-              <button
-                class="watchBtn"
-                onclick="watchVideo('${video.id}')"
-              >
-                WATCH
-              </button>
-
-            </div>
+            <button
+              class="watchBtn"
+              onclick="watchVideo('${escapeHTML(video.id)}','${escapeHTML(video.title)}')"
+            >
+              WATCH
+            </button>
 
           </div>
-        `
-      ).join("");
+
+        </div>
+
+      `).join("");
+
 
   }catch(error){
 
-    grid.innerHTML =
-      `<div>${escapeHTML(
-        error.message
-      )}</div>`;
+    grid.innerHTML = `
+      <div class="videoEmpty">
+        Unable to load videos.
+        <br><br>
+        ${escapeHTML(error.message)}
+      </div>
+    `;
   }
+
 }
 
 
-async function watchVideo(id){
+/*
+  IMPORTANT:
+  Browser <video> cannot attach Authorization
+  header to a normal video URL.
 
-  const playerPanel =
-    document.getElementById(
-      "videoPlayerPanel"
-    );
+  Therefore this function first tries the backend
+  stream endpoint.
+
+  If the backend is protected by Bearer auth,
+  server.js needs a cookie/signed-stream solution
+  for browser playback.
+*/
+
+function watchVideo(id,title){
 
   const player =
-    document.getElementById(
-      "videoPlayer"
-    );
+    document.getElementById("videoPlayer");
 
-  const token =
-    getToken();
+  const wrap =
+    document.getElementById("playerWrap");
 
-  player.src =
-    `${API_URL}/api/videos/${encodeURIComponent(id)}/stream`;
+  const info =
+    document.getElementById("playerInfo");
 
-  /*
-    Authorization headers cannot be directly
-    added to a normal HTML video element.
-    For production, use a short-lived signed
-    playback URL or another authenticated
-    media mechanism.
-  */
 
-  playerPanel.classList.remove(
-    "hidden"
-  );
+  const streamURL =
+    API_URL +
+    "/api/videos/" +
+    encodeURIComponent(id) +
+    "/stream";
+
+
+  player.pause();
+
+  player.src = streamURL;
 
   player.load();
+
+  wrap.style.display = "block";
+
+  info.textContent =
+    "PLAYING // " + title;
+
+
+  player.play().catch(()=>{
+
+    info.textContent =
+      "PLAYER READY // press play";
+
+  });
+
+
+  wrap.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+
 }
 
 
-/* ADMIN */
+/* =========================================================
+   ADMIN
+========================================================= */
 
 async function loadAdmin(){
 
+  if(currentUser?.role !== "admin"){
+    return;
+  }
+
+
   try{
 
+    const usersData =
+      await api("/api/admin/users");
+
     const users =
-      await api(
-        "/api/admin/users"
-      );
+      Array.isArray(usersData)
+        ? usersData
+        : usersData.users || [];
 
-    const videos =
-      await api(
-        "/api/videos"
-      );
 
-    document
-      .getElementById("userCount")
-      .textContent =
+    document.getElementById("userCount").textContent =
       users.length;
 
-    document
-      .getElementById("adminVideoCount")
-      .textContent =
+
+    document.getElementById("usersTable").innerHTML =
+
+      users.map(user => `
+
+        <tr>
+
+          <td>
+            ${escapeHTML(user.username)}
+          </td>
+
+          <td>
+            ${escapeHTML(user.role)}
+          </td>
+
+          <td>
+            ${escapeHTML(
+              user.created_at
+                ? new Date(user.created_at).toLocaleString()
+                : "---"
+            )}
+          </td>
+
+        </tr>
+
+      `).join("");
+
+
+  }catch(error){
+
+    document.getElementById("usersTable").innerHTML = `
+      <tr>
+        <td colspan="3">
+          ${escapeHTML(error.message)}
+        </td>
+      </tr>
+    `;
+  }
+
+
+  await loadAdminVideos();
+
+}
+
+
+async function loadAdminVideos(){
+
+  try{
+
+    const data =
+      await api("/api/videos");
+
+    const videos =
+      Array.isArray(data)
+        ? data
+        : data.videos || [];
+
+
+    document.getElementById("adminVideoCount").textContent =
       videos.length;
 
 
-    document
-      .getElementById("usersTable")
-      .innerHTML =
-      users.map(
-        user => `
-          <tr>
-            <td>
-              ${escapeHTML(
-                user.username
-              )}
-            </td>
-
-            <td>
-              ${escapeHTML(
-                user.role
-              )}
-            </td>
-
-            <td>
-              ${escapeHTML(
-                new Date(
-                  user.createdAt
-                ).toLocaleString()
-              )}
-            </td>
-          </tr>
-        `
-      ).join("");
+    const table =
+      document.getElementById("adminVideosTable");
 
 
-    document
-      .getElementById("adminVideos")
-      .innerHTML =
-      videos.length
-      ? videos.map(
-          video => `
-            <div class="infoRow">
+    if(videos.length === 0){
 
-              <span>
-                ${escapeHTML(
-                  video.title
-                )}
-              </span>
+      table.innerHTML = `
+        <tr>
+          <td colspan="3">
+            No videos
+          </td>
+        </tr>
+      `;
 
-              <button
-                class="deleteBtn"
-                onclick="deleteVideo('${video.id}')"
-              >
-                DELETE
-              </button>
+      return;
+    }
 
-            </div>
-          `
-        ).join("")
-      : "<p>No videos.</p>";
+
+    table.innerHTML =
+      videos.map(video => `
+
+        <tr>
+
+          <td>
+            ${escapeHTML(video.title)}
+          </td>
+
+          <td>
+            ${escapeHTML(
+              video.created_at
+                ? new Date(video.created_at).toLocaleString()
+                : "---"
+            )}
+          </td>
+
+          <td>
+
+            <button
+              class="deleteBtn"
+              onclick="deleteVideo('${escapeHTML(video.id)}')"
+            >
+              DELETE
+            </button>
+
+          </td>
+
+        </tr>
+
+      `).join("");
+
 
   }catch(error){
 
-    document
-      .getElementById("adminStatus")
-      .textContent =
-      error.message;
+    document.getElementById("adminVideosTable").innerHTML = `
+      <tr>
+        <td colspan="3">
+          ${escapeHTML(error.message)}
+        </td>
+      </tr>
+    `;
   }
+
 }
 
+
+/* =========================================================
+   ADD VIDEO
+========================================================= */
 
 async function addVideo(){
 
+  if(currentUser?.role !== "admin"){
+
+    alert("Admin access required.");
+
+    return;
+  }
+
+
   const title =
-    document
-      .getElementById("videoTitle")
-      .value
-      .trim();
+    document.getElementById("videoTitle")
+    .value
+    .trim();
 
   const url =
-    document
-      .getElementById("videoURL")
-      .value
-      .trim();
+    document.getElementById("videoURL")
+    .value
+    .trim();
 
-  const status =
-    document
-      .getElementById("adminStatus");
+  const msg =
+    document.getElementById("adminMsg");
+
+
+  msg.textContent = "";
+
 
   if(!title || !url){
 
-    status.textContent =
-      "Title and URL are required.";
+    msg.textContent =
+      "Enter title and URL.";
 
     return;
   }
 
-  status.textContent =
-    "Adding video...";
 
   try{
 
-    await api(
-      "/api/admin/videos",
-      {
-        method:"POST",
-        body:JSON.stringify({
-          title,
-          url
-        })
+    new URL(url);
+
+  }catch{
+
+    msg.textContent =
+      "Invalid URL.";
+
+    return;
+  }
+
+
+  try{
+
+    await api("/api/admin/videos",{
+
+      method:"POST",
+
+      body:{
+        title,
+        url
       }
-    );
 
-    document
-      .getElementById("videoTitle")
-      .value = "";
+    });
 
-    document
-      .getElementById("videoURL")
-      .value = "";
 
-    status.textContent =
-      "Video added.";
+    document.getElementById("videoTitle").value = "";
+    document.getElementById("videoURL").value = "";
 
-    loadAdmin();
-    loadVideos();
+
+    msg.textContent =
+      "✓ Video added successfully.";
+
+
+    await loadVideos();
+    await loadAdminVideos();
+
 
   }catch(error){
 
-    status.textContent =
-      error.message;
+    msg.textContent =
+      error.message || "Failed to add video.";
   }
+
 }
 
 
+/* =========================================================
+   DELETE VIDEO
+========================================================= */
+
 async function deleteVideo(id){
 
-  if(!confirm(
-    "Delete this video?"
-  )){
+  if(currentUser?.role !== "admin"){
+
+    alert("Admin access required.");
+
     return;
   }
+
+
+  if(!confirm("Delete this video?")){
+
+    return;
+  }
+
 
   try{
 
     await api(
-      `/api/admin/videos/${encodeURIComponent(id)}`,
+      "/api/admin/videos/" +
+      encodeURIComponent(id),
       {
         method:"DELETE"
       }
     );
 
-    loadAdmin();
-    loadVideos();
+
+    await loadVideos();
+    await loadAdminVideos();
+
+
+    document.getElementById("adminMsg").textContent =
+      "✓ Video deleted.";
+
 
   }catch(error){
 
-    alert(error.message);
+    document.getElementById("adminMsg").textContent =
+      error.message || "Delete failed.";
   }
+
 }
 
 
-/* LOGOUT */
+/* =========================================================
+   LOGOUT
+========================================================= */
 
 async function logout(){
 
   try{
 
-    if(getToken()){
+    const token = getToken();
 
-      await api(
-        "/api/auth/logout",
+    if(token){
+
+      await fetch(
+        API_URL + "/api/auth/logout",
         {
-          method:"POST"
+          method:"POST",
+          headers:{
+            Authorization:"Bearer " + token
+          }
         }
       );
     }
 
-  }catch{}
+  }catch{
+    /* ignore logout network errors */
+  }
 
-  localStorage.removeItem(
-    "axom_token"
-  );
 
-  localStorage.removeItem(
-    "axom_user"
-  );
+  localStorage.removeItem("axom_auth");
+  sessionStorage.removeItem("axom_auth");
 
-  sessionStorage.removeItem(
-    "axom_session"
-  );
+
+  currentUser = null;
+
+
+  if(dashboardTimer){
+
+    clearInterval(dashboardTimer);
+
+    dashboardTimer = null;
+  }
+
 
   location.reload();
+
 }
 
 
-/* ONLINE STATUS */
+/* =========================================================
+   ONLINE / OFFLINE
+========================================================= */
 
-window.addEventListener(
-  "online",
-  () => {
+window.addEventListener("online",()=>{
 
-    document
-      .getElementById("connection")
-      .textContent =
-      "ONLINE";
+  const el =
+    document.getElementById("connectionStatus");
+
+  if(el){
+    el.textContent = "ONLINE";
   }
-);
 
-window.addEventListener(
-  "offline",
-  () => {
+});
 
-    document
-      .getElementById("connection")
-      .textContent =
-      "OFFLINE";
+
+window.addEventListener("offline",()=>{
+
+  const el =
+    document.getElementById("connectionStatus");
+
+  if(el){
+    el.textContent = "OFFLINE";
   }
-);
+
+});
+
+
+/* =========================================================
+   START
+========================================================= */
+
+runBoot();
 
 </script>
 
 </body>
-  </html>
+          </html>
