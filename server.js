@@ -6,12 +6,11 @@ const { Pool } = require("pg");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json({ limit: "1mb" }));
+app.use(express.static("public"));
 
-if (!process.env.DATABASE_URL) {
-  console.error("DATABASE_URL is missing.");
-  process.exit(1);
-}
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/public/index.html");
+});
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
